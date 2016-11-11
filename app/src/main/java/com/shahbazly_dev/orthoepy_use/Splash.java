@@ -1,7 +1,10 @@
 package com.shahbazly_dev.orthoepy_use;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 import com.stephentuso.welcome.WelcomeHelper;
 
@@ -15,6 +18,14 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         welcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
         welcomeScreen.show(savedInstanceState);
+        Button button = (Button)findViewById(R.id.btn_start_train);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Splash.this, TrainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
