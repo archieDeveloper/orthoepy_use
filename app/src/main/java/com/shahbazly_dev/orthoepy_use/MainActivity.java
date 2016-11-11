@@ -8,21 +8,23 @@ import android.widget.Button;
 
 import com.stephentuso.welcome.WelcomeHelper;
 
-public class Splash extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     WelcomeHelper welcomeScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_main);
+
         welcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
         welcomeScreen.show(savedInstanceState);
+
         Button button = (Button)findViewById(R.id.btn_start_train);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Splash.this, TrainActivity.class);
+                Intent intent = new Intent(MainActivity.this, TrainActivity.class);
                 startActivity(intent);
             }
         });

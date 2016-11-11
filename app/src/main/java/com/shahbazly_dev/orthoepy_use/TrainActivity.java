@@ -2,48 +2,50 @@ package com.shahbazly_dev.orthoepy_use;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.util.Log;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class TrainActivity extends AppCompatActivity {
-    ArrayList<String> words;
-    TextView textView;
+    ArrayList<String> words = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train);
-        textView = (TextView)findViewById(R.id.textView);
-
-        //а это кажется попытка поймать исключение, но я не уверен, короче тоже не знаю, что это
-        try {
-            loadWords();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        loadWords();
     }
 
-    // throws FileNotFoundException - не знаю, что это, но без этого не компилтся XD
-    protected void loadWords() throws FileNotFoundException {
-        // загрузка слов из words.txt в ArrayList
-        Scanner scan = new Scanner(new File("/src/main/res/raw/words.txt"));
-        words = new ArrayList<String>();
-        while (scan.hasNextLine()){
-            words.add(scan.next());
-        }
-        scan.close();
+    protected void loadWords() {
+        InputStream inputStream;
+        String text = "words.txt";
+        byte[] buffer;
 
-        //Попытка проверить, загрузились ли слова в аррей, посредством отображения их в textView
-        String string = " ";
-        for (int i = 0; i < words.size(); i++) {
-            string = string + words.get(i) + " ";
-        }
-        textView.setText(string);
+        try {
+            //Asset в String
+            inputStream = getAssets().open(text);
+            int size = inputStream.available();
+            buffer = new byte[size];
 
+            inputStream.read(buffer);
+            inputStream.close();
+
+            String str_data = new String(buffer);
+
+            //String в ArrayList
+            Scanner scan = new Scanner(str_data);
+            while (scan.hasNext()) {
+                words.add(scan.next());
+            }
+            scan.close();
+            String str = Integer.toString(words.size());
+            Log.e("Количество слов в базе",str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
