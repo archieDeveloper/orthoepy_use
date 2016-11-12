@@ -13,7 +13,24 @@
     android:background="@color/color_midnight_blue">
 
     <info.hoang8f.widget.FButton
-        android:text="Начать тренировку"
+        android:text="Проверь себя"
+        android:layout_height="wrap_content"
+        android:id="@+id/check_yourself"
+        fbutton:buttonColor="@color/colorPrimary"
+        fbutton:shadowColor="@color/colorPrimaryDark"
+        fbutton:shadowEnabled="true"
+        fbutton:shadowHeight="5dp"
+        fbutton:cornerRadius="5dp"
+        android:textSize="14sp"
+        android:textColor="@color/color_midnight_blue"
+        android:layout_marginBottom="15dp"
+        android:layout_width="200sp"
+        android:layout_above="@+id/btn_start_train"
+        android:layout_alignLeft="@+id/btn_start_train"
+        android:layout_alignStart="@+id/btn_start_train" />
+
+    <info.hoang8f.widget.FButton
+        android:text="Тренировка"
         android:layout_height="wrap_content"
         android:id="@+id/btn_start_train"
         fbutton:buttonColor="@color/color_peter_river"
@@ -21,33 +38,16 @@
         fbutton:shadowEnabled="true"
         fbutton:shadowHeight="5dp"
         fbutton:cornerRadius="5dp"
-        android:textSize="15sp"
-        android:textColor="@color/color_clouds"
+        android:textSize="14sp"
+        android:textColor="@color/color_midnight_blue"
         android:layout_above="@+id/btn_dictionary"
         android:layout_alignLeft="@+id/btn_dictionary"
         android:layout_alignStart="@+id/btn_dictionary"
         android:layout_marginBottom="15dp"
-        android:layout_width="210sp" />
+        android:layout_width="200sp" />
 
     <info.hoang8f.widget.FButton
-        android:text="Оценить приложение"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_rate_app"
-        fbutton:buttonColor="@color/color_emerald"
-        fbutton:shadowColor="@color/color_nephritis"
-        fbutton:shadowEnabled="true"
-        fbutton:shadowHeight="5dp"
-        fbutton:cornerRadius="5dp"
-        android:textSize="15sp"
-        android:textColor="@color/color_clouds"
-        android:layout_width="210sp"
-        android:layout_marginBottom="57dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/btn_dictionary"
-        android:layout_alignStart="@+id/btn_dictionary" />
-
-    <info.hoang8f.widget.FButton
-        android:text="Орфоэпический словарь"
+        android:text="Словарь"
         android:layout_height="wrap_content"
         android:id="@+id/btn_dictionary"
         fbutton:buttonColor="@color/color_turquoise"
@@ -55,20 +55,25 @@
         fbutton:shadowEnabled="true"
         fbutton:shadowHeight="5dp"
         fbutton:cornerRadius="5dp"
-        android:textSize="15sp"
-        android:textColor="@color/color_clouds"
-        android:layout_width="210sp"
+        android:layout_width="200sp"
         android:layout_above="@+id/btn_rate_app"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp" />
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/color_midnight_blue" />
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <info.hoang8f.widget.FButton
+        android:text="оставить отзыв"
         android:layout_height="wrap_content"
-        fbutton:srcCompat="@drawable/unlocked"
-        android:layout_marginBottom="49dp"
-        android:id="@+id/imageView"
-        android:layout_above="@+id/btn_start_train"
-        android:layout_centerHorizontal="true" />
-
+        android:id="@+id/btn_rate_app"
+        fbutton:buttonColor="@color/color_emerald"
+        fbutton:shadowColor="@color/color_nephritis"
+        fbutton:shadowEnabled="true"
+        fbutton:shadowHeight="5dp"
+        fbutton:cornerRadius="5dp"
+        android:textSize="14sp"
+        android:textColor="@color/color_midnight_blue"
+        android:layout_width="200sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/btn_dictionary"
+        android:layout_alignStart="@+id/btn_dictionary" />
 </RelativeLayout>
