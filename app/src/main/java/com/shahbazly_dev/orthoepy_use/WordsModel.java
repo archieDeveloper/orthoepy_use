@@ -5,10 +5,12 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
 import static android.R.attr.data;
+import static android.R.attr.listChoiceBackgroundIndicator;
 
 
 class WordsModel {
@@ -62,7 +64,16 @@ class WordsModel {
         return words.get(random);
     }
 
-    String getTrueLatter(String word) {
+    ArrayList<String> getRandomWords(int amount) {
+        ArrayList<String> randomWords = new ArrayList<String>(words);
+        Collections.shuffle(randomWords);
+        if (randomWords.size() > amount) {
+            randomWords.subList(amount, randomWords.size()).clear();
+        }
+        return randomWords;
+    }
+
+    String getTrueLetter(String word) {
         String true_letter = null;
         char[] word_by_letter = word.toCharArray(); // разбиваем слово на буквы
         for(char x:word_by_letter) {

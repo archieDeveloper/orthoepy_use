@@ -13,7 +13,7 @@ import info.hoang8f.widget.FButton;
 
 public class TrainActivity extends AppCompatActivity {
     LinearLayout linearLayout;
-    WordsModel wordsModel;
+    TrainManager trainManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,8 @@ public class TrainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_train);
 
         try {
-            wordsModel = new WordsModel(getAssets().open("words.txt"));
+            WordsModel wordsModel = new WordsModel(getAssets().open("words.txt"));
+            trainManager = new TrainManager(wordsModel);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -30,21 +31,25 @@ public class TrainActivity extends AppCompatActivity {
     }
 
     protected void startTrain() {
-        String word = wordsModel.getRandomWord();
-        String trueLetter = wordsModel.getTrueLatter(word);
+        if (trainManager.hasNextWord()) {
+            String word = trainManager.getNextWord();
+            String trueLetter = trainManager.getTrueLetter();
 
-        if (trueLetter != null) {
-            int wordLength = word.length();
-            for (int i = 0; i < wordLength; i++) {
-                createButtons(word.charAt(i), trueLetter);
+            if (trueLetter != null) {
+                int wordLength = word.length();
+                for (int i = 0; i < wordLength; i++) {
+                    createButtons(word.charAt(i), trueLetter);
+                }
+            } else {
+                Log.e("ERROE", "Не нашел правильный символ в слове: \"" + word + "\"");
             }
         } else {
-            Log.e("ERROE", "Не нашел правильный символ в слове: \"" + word + "\"");
+            Log.e("GAMEOVER", "Закончились слова, начни занова :) " + Integer.toString(trainManager.getCountErrors()) + " ошибок");
         }
     }
 
     public void createButtons(char charInButton, final String true_letter) {
-        boolean isVowelsChar = wordsModel.isVowelsChar(charInButton);
+        boolean isVowelsChar = trainManager.getWordsModel().isVowelsChar(charInButton);
         //Создаем кнопки и помещаем в них буквы
         final FButton myButton = new FButton(this);
         myButton.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
@@ -65,6 +70,7 @@ public class TrainActivity extends AppCompatActivity {
                         linearLayout.removeAllViews();
                         startTrain();
                     } else {
+                        trainManager.addCountError();
                         myButton.setButtonColor(getResources().getColor(R.color.color_alizarin));
                         myButton.setShadowColor(getResources().getColor(R.color.color_pomegranate));
                     }
