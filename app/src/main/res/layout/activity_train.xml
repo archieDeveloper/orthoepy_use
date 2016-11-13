@@ -4,13 +4,30 @@
     android:id="@+id/activity_train"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.shahbazly_dev.orthoepy_use.TrainActivity">
+    tools:context="com.shahbazly_dev.orthoepy_use.TrainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_gravity="top"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+        <ProgressBar
+            android:id="@+id/progressTrain"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center"
+            style="@android:style/Widget.ProgressBar.Horizontal" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/liner"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:gravity="center">
     </LinearLayout>
