@@ -56,4 +56,8 @@ class TrainManager {
     public int getCountErrors() {
         return countErrors;
     }
+
+    public int getProgress() {
+        return (int) (((float)index/maxIndex)*100);
+    }
 }

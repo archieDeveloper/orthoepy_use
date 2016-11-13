@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import info.hoang8f.widget.FButton;
 public class TrainActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     TrainManager trainManager;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,8 @@ public class TrainActivity extends AppCompatActivity {
     }
 
     public void correctAnswer(FButton myButton) {
+        progressBar = (ProgressBar) findViewById(R.id.progressTrain);
+        progressBar.setProgress(trainManager.getProgress());
         myButton.setButtonColor(getResources().getColor(R.color.color_emerald));
         myButton.setShadowColor(getResources().getColor(R.color.color_nephritis));
         final int childСount = linearLayout.getChildCount();
