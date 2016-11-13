@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class TrainActivity extends AppCompatActivity {
             if (trueLetter != null) {
                 int wordLength = word.length();
                 for (int i = 0; i < wordLength; i++) {
-                    createButtons(word.charAt(i), trueLetter);
+                    createButtons(word.charAt(i), trueLetter, i);
                 }
             } else {
                 Log.e("ERROE", "Не нашел правильный символ в слове: \"" + word + "\"");
@@ -48,7 +50,7 @@ public class TrainActivity extends AppCompatActivity {
         }
     }
 
-    public void createButtons(char charInButton, final String true_letter) {
+    public void createButtons(char charInButton, final String true_letter, int item) {
         boolean isVowelsChar = trainManager.getWordsModel().isVowelsChar(charInButton);
         //Создаем кнопки и помещаем в них буквы
         final FButton myButton = new FButton(this);
@@ -67,8 +69,34 @@ public class TrainActivity extends AppCompatActivity {
                     if (text.equals(true_letter)) {
                         myButton.setButtonColor(getResources().getColor(R.color.color_emerald));
                         myButton.setShadowColor(getResources().getColor(R.color.color_nephritis));
-                        linearLayout.removeAllViews();
-                        startTrain();
+                        final int childcount = linearLayout.getChildCount();
+                        for (int i = 0; i < childcount; i++) {
+                            v = linearLayout.getChildAt(i);
+                            TranslateAnimation translateAnimation = new TranslateAnimation(0.0f, -2000.0f, 0.0f, 0.0f);
+                            translateAnimation.setStartOffset((25*i)+25/(i+1));
+                            translateAnimation.setDuration(300);
+                            translateAnimation.setFillAfter(true);
+                            if (i == childcount-1) {
+                                translateAnimation.setAnimationListener(new TranslateAnimation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        linearLayout.removeAllViews();
+                                        startTrain();
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
+
+                                    }
+                                });
+                            }
+                            v.startAnimation(translateAnimation);
+                        }
                     } else {
                         trainManager.addCountError();
                         myButton.setButtonColor(getResources().getColor(R.color.color_alizarin));
@@ -86,6 +114,12 @@ public class TrainActivity extends AppCompatActivity {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) myButton.getLayoutParams();
         params.setMargins(0, 0, 10, 0); //слева, сверху, справа, снизу
         myButton.setLayoutParams(params);
+
+        TranslateAnimation translateAnimation = new TranslateAnimation(2000.0f, 0.0f, 0.0f, 0.0f);
+        translateAnimation.setStartOffset((25*item)+25/(item+1));
+        translateAnimation.setDuration(300);
+        translateAnimation.setFillAfter(true);
+        myButton.startAnimation(translateAnimation);
     }
 
 }
