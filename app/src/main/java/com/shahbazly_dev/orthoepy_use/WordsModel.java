@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import static android.R.attr.data;
+
 
 class WordsModel {
 
@@ -74,5 +76,17 @@ class WordsModel {
         return true_letter;
     }
 
+    Boolean isVowelsChar(char charInWord) {
+        String vowels = "ёуеыаоэяию";
+        Boolean isVowels = false;
+        int vowelsLength = vowels.length();
+        for (int i = 0; i < vowelsLength; i++) {
+            if (vowels.charAt(i) == Character.toLowerCase(charInWord)) {
+                isVowels = true;
+                break;
+            }
+        }
+        return isVowels;
+    }
 
 }

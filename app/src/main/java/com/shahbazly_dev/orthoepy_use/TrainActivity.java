@@ -44,6 +44,7 @@ public class TrainActivity extends AppCompatActivity {
     }
 
     public void createButtons(char charInButton, final String true_letter) {
+        boolean isVowelsChar = wordsModel.isVowelsChar(charInButton);
         //Создаем кнопки и помещаем в них буквы
         final FButton myButton = new FButton(this);
         myButton.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
@@ -51,24 +52,29 @@ public class TrainActivity extends AppCompatActivity {
         myButton.setTextSize(17);
         myButton.setCornerRadius(100);
         myButton.setShadowEnabled(false);
-        myButton.setButtonColor(getResources().getColor(R.color.color_sun_flower));
-        myButton.setShadowColor(getResources().getColor(R.color.color_orange));
-        final LinearLayout finalLinearLayout = linearLayout;
-        myButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text = (String) myButton.getText();
-                if (text.equals(true_letter)) {
-                    myButton.setButtonColor(getResources().getColor(R.color.color_emerald));
-                    myButton.setShadowColor(getResources().getColor(R.color.color_nephritis));
-                    finalLinearLayout.removeAllViews();
-                    startTrain();
-                } else {
-                    myButton.setButtonColor(getResources().getColor(R.color.color_alizarin));
-                    myButton.setShadowColor(getResources().getColor(R.color.color_pomegranate));
+        if (isVowelsChar) {
+            myButton.setButtonColor(getResources().getColor(R.color.color_sun_flower));
+            myButton.setShadowColor(getResources().getColor(R.color.color_orange));
+            myButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String text = (String) myButton.getText();
+                    if (text.equals(true_letter)) {
+                        myButton.setButtonColor(getResources().getColor(R.color.color_emerald));
+                        myButton.setShadowColor(getResources().getColor(R.color.color_nephritis));
+                        linearLayout.removeAllViews();
+                        startTrain();
+                    } else {
+                        myButton.setButtonColor(getResources().getColor(R.color.color_alizarin));
+                        myButton.setShadowColor(getResources().getColor(R.color.color_pomegranate));
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            myButton.setEnabled(false);
+            myButton.setButtonColor(getResources().getColor(R.color.color_silver));
+            myButton.setShadowColor(getResources().getColor(R.color.color_concrete));
+        }
         linearLayout = (LinearLayout) findViewById(R.id.liner);
         linearLayout.addView(myButton);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) myButton.getLayoutParams();
