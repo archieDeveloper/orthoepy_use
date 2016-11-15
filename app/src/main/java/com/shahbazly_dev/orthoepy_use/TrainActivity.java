@@ -11,18 +11,18 @@ import android.widget.ProgressBar;
 
 import java.io.IOException;
 
-import info.hoang8f.widget.FButton;
-
-
 public class TrainActivity extends AppCompatActivity {
-    LinearLayout linearLayout;
-    TrainManager trainManager;
     ProgressBar progressBar;
+    TrainManager trainManager;
+    LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train);
+
+        linearLayout = (LinearLayout) findViewById(R.id.liner);
+        progressBar = (ProgressBar) findViewById(R.id.progressTrain);
 
         try {
             WordsModel wordsModel = new WordsModel(getAssets().open("words.txt"));
@@ -38,107 +38,118 @@ public class TrainActivity extends AppCompatActivity {
         if (trainManager.hasNextWord()) {
             String word = trainManager.getNextWord();
             String trueLetter = trainManager.getTrueLetter();
-
-            if (trueLetter != null) {
-                int wordLength = word.length();
-                for (int i = 0; i < wordLength; i++) {
-                    createButtons(word.charAt(i), trueLetter, i);
-                }
-            } else {
-                Log.e("ERROE", "Не нашел правильный символ в слове: \"" + word + "\"");
-            }
+            trainWord(word, trueLetter);
         } else {
+            this.recreate();
             Log.e("GAMEOVER", "Закончились слова, начни занова :) " + Integer.toString(trainManager.getCountErrors()) + " ошибок");
         }
     }
 
-    public void createButtons(char charInButton, final String true_letter, int item) {
-        boolean isVowelsChar = trainManager.getWordsModel().isVowelsChar(charInButton);
-        //Создаем кнопки и помещаем в них буквы
-        final FButton myButton = new FButton(this);
-        myButton.setLayoutParams(new LinearLayout.LayoutParams(120, 120));
-        myButton.setText(Character.toString(charInButton));
-        myButton.setTextSize(17);
-        myButton.setCornerRadius(100);
-        myButton.setShadowEnabled(false);
-        if (isVowelsChar) {
-            createVowelsButton(myButton, true_letter);
+    public void trainWord(String word, String trueLetter) {
+        if (trueLetter != null) {
+            int wordLength = word.length();
+            for (int i = 0; i < wordLength; i++) {
+                boolean isLast = i == wordLength - 1;
+                createButton(word.charAt(i), trueLetter, i, isLast);
+            }
         } else {
-            createConsonantButton(myButton);
+            Log.e("ERROE", "Не нашел правильный символ в слове: \"" + word + "\"");
         }
-        linearLayout = (LinearLayout) findViewById(R.id.liner);
-        linearLayout.addView(myButton);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) myButton.getLayoutParams();
-        params.setMargins(0, 0, 10, 0); //слева, сверху, справа, снизу
-        myButton.setLayoutParams(params);
-        TranslateAnimation translateAnimation = new TranslateAnimation(2000.0f, 0.0f, 0.0f, 0.0f);
-        translateAnimation.setStartOffset((25*item)+25/(item+1));
-        translateAnimation.setDuration(300);
-        translateAnimation.setFillAfter(true);
-        myButton.startAnimation(translateAnimation);
     }
 
-    public void createVowelsButton(final FButton myButton, final String true_letter) {
-        myButton.setButtonColor(getResources().getColor(R.color.color_sun_flower));
-        myButton.setShadowColor(getResources().getColor(R.color.color_orange));
-        myButton.setOnClickListener(new View.OnClickListener() {
+    public void createButton(char charInButton, String true_letter, int item, boolean isLast) {
+        ButtonChar buttonChar = new ButtonChar(this , charInButton);
+        if (isLast) {
+            buttonChar.inAnim(item, animationListenerInButton());
+        } else {
+            buttonChar.inAnim(item);
+        }
+        boolean isVowelsChar = trainManager.getWordsModel().isVowelsChar(charInButton);
+        if (isVowelsChar) {
+            boolean isCorrectButton = true_letter.equals(Character.toString(charInButton));
+            View.OnClickListener onClickListener = isCorrectButton
+                    ? onClickListenerButtonCorrect()
+                    : onClickListenerButtonInCorrect();
+            buttonChar.createVowelsButton(onClickListener);
+        } else {
+            buttonChar.createConsonantButton();
+        }
+        linearLayout.addView(buttonChar);
+    }
+
+    public View.OnClickListener onClickListenerButtonCorrect() {
+        return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = (String) myButton.getText();
-                if (text.equals(true_letter)) {
-                    correctAnswer(myButton);
-                } else {
-                    inCorrectAnswer(myButton);
+                ButtonChar buttonChar = (ButtonChar) v;
+                progressBar.setProgress(trainManager.getProgress());
+                buttonChar.correctAnswer();
+                int childCount = linearLayout.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    ButtonChar currentButtonChar = (ButtonChar) linearLayout.getChildAt(i);
+                    currentButtonChar.disableClickLister();
+                    if (i == childCount-1) {
+                        currentButtonChar.outAnim(i, animationListenerOutButton());
+                    } else {
+                        currentButtonChar.outAnim(i);
+                    }
                 }
             }
-        });
+        };
     }
 
-    public void createConsonantButton(FButton myButton) {
-        myButton.setEnabled(false);
-        myButton.setButtonColor(getResources().getColor(R.color.color_silver));
-        myButton.setShadowColor(getResources().getColor(R.color.color_concrete));
-    }
-
-    public void correctAnswer(FButton myButton) {
-        progressBar = (ProgressBar) findViewById(R.id.progressTrain);
-        progressBar.setProgress(trainManager.getProgress());
-        myButton.setButtonColor(getResources().getColor(R.color.color_emerald));
-        myButton.setShadowColor(getResources().getColor(R.color.color_nephritis));
-        final int childСount = linearLayout.getChildCount();
-        for (int i = 0; i < childСount; i++) {
-            View v = linearLayout.getChildAt(i);
-            TranslateAnimation translateAnimation = new TranslateAnimation(0.0f, -2000.0f, 0.0f, 0.0f);
-            translateAnimation.setStartOffset((25*i)+25/(i+1));
-            translateAnimation.setDuration(300);
-            translateAnimation.setFillAfter(true);
-            if (i == childСount-1) {
-                translateAnimation.setAnimationListener(new TranslateAnimation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        linearLayout.removeAllViews();
-                        startTrain();
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
+    public View.OnClickListener onClickListenerButtonInCorrect() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ButtonChar buttonChar = (ButtonChar) v;
+                buttonChar.inCorrectAnswer();
+                trainManager.addCountError();
             }
-            v.startAnimation(translateAnimation);
-        }
+        };
     }
 
-    public void inCorrectAnswer(FButton myButton) {
-        trainManager.addCountError();
-        myButton.setButtonColor(getResources().getColor(R.color.color_alizarin));
-        myButton.setShadowColor(getResources().getColor(R.color.color_pomegranate));
+    public TranslateAnimation.AnimationListener animationListenerInButton() {
+        return new TranslateAnimation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                int childCount = linearLayout.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    ButtonChar currentButtonChar = (ButtonChar) linearLayout.getChildAt(i);
+                    currentButtonChar.enableClickLister();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
+    }
+
+    public TranslateAnimation.AnimationListener animationListenerOutButton() {
+        return new TranslateAnimation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                linearLayout.removeAllViews();
+                startTrain();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
     }
 
 }
