@@ -9,10 +9,6 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
-import static android.R.attr.data;
-import static android.R.attr.listChoiceBackgroundIndicator;
-
-
 class WordsModel {
 
     private ArrayList<String> words = new ArrayList<String>();
