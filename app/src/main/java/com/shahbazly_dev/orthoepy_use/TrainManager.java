@@ -24,7 +24,7 @@ class TrainManager {
         maxIndex = words.size();
     }
 
-    public WordsModel getWordsModel() {
+    WordsModel getWordsModel() {
         return wordsModel;
     }
 
@@ -36,28 +36,28 @@ class TrainManager {
         return maxIndex;
     }
 
-    public String getTrueLetter() {
+    String getTrueLetter() {
         return wordsModel.getTrueLetter(words.get(index - 1));
     }
 
-    public boolean hasNextWord() {
+    boolean hasNextWord() {
         return index < maxIndex;
     }
 
-    public String getNextWord() {
+    String getNextWord() {
         index += 1;
         return words.get(index - 1);
     }
 
-    public void addCountError() {
+    void addCountError() {
         countErrors += 1;
     }
 
-    public int getCountErrors() {
+    int getCountErrors() {
         return countErrors;
     }
 
-    public int getProgress() {
+    int getProgress() {
         return (int) (((float)index/maxIndex)*100);
     }
 }
