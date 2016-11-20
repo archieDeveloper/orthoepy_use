@@ -46,6 +46,11 @@ public class ButtonChar extends FButton {
         this.setShadowColor(getResources().getColor(R.color.color_nephritis));
     }
 
+    public void inCorrectAnswer() {
+        this.setButtonColor(getResources().getColor(R.color.color_alizarin));
+        this.setShadowColor(getResources().getColor(R.color.color_pomegranate));
+    }
+
     public void inAnim(int i) {
         this.inAnim(i, null);
     }
@@ -74,11 +79,6 @@ public class ButtonChar extends FButton {
         }
 
         this.startAnimation(translateAnimation);
-    }
-
-    public void inCorrectAnswer() {
-        this.setButtonColor(getResources().getColor(R.color.color_alizarin));
-        this.setShadowColor(getResources().getColor(R.color.color_pomegranate));
     }
 
     public void enableClickLister() {
