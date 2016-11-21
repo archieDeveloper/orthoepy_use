@@ -11,8 +11,11 @@ import android.widget.ProgressBar;
 
 import java.io.IOException;
 
+import co.mobiwise.library.ProgressLayout;
+
 public class TrainActivity extends AppCompatActivity {
     ProgressBar progressBar;
+    ProgressLayout progressLayout;
     TrainManager trainManager;
     LinearLayout linearLayout;
 
@@ -23,6 +26,7 @@ public class TrainActivity extends AppCompatActivity {
 
         linearLayout = (LinearLayout) findViewById(R.id.liner);
         progressBar = (ProgressBar) findViewById(R.id.progressTrain);
+        progressLayout = (ProgressLayout) findViewById(R.id.progressLayout);
 
         try {
             WordsModel wordsModel = new WordsModel(getAssets().open("words.txt"));
@@ -37,6 +41,7 @@ public class TrainActivity extends AppCompatActivity {
     protected void startTrain() {
         if (trainManager.hasNextWord()) {
             progressBar.setProgress(trainManager.getProgress());
+            progressLayout.setCurrentProgress(trainManager.getProgress());
             String word = trainManager.getNextWord();
             String trueLetter = trainManager.getTrueLetter();
             trainWord(word, trueLetter);
@@ -54,7 +59,7 @@ public class TrainActivity extends AppCompatActivity {
                 createButton(word.charAt(i), trueLetter, i, isLast);
             }
         } else {
-            Log.e("ERROE", "Не нашел правильный символ в слове: \"" + word + "\"");
+            Log.e("ERROR", "Не нашел правильный символ в слове: \"" + word + "\"");
         }
     }
 

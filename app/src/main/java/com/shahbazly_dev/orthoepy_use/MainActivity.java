@@ -11,6 +11,7 @@ import com.stephentuso.welcome.WelcomeHelper;
 public class MainActivity extends AppCompatActivity {
 
     WelcomeHelper welcomeScreen;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        dbHelper = new DBHelper(this,1);
+        dbHelper.getWritableDatabase();
     }
 
     @Override

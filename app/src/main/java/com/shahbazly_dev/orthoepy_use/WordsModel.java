@@ -95,5 +95,4 @@ class WordsModel {
         }
         return isVowels;
     }
-
 }
