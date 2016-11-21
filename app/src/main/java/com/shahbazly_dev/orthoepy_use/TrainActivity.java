@@ -36,6 +36,7 @@ public class TrainActivity extends AppCompatActivity {
 
     protected void startTrain() {
         if (trainManager.hasNextWord()) {
+            progressBar.setProgress(trainManager.getProgress());
             String word = trainManager.getNextWord();
             String trueLetter = trainManager.getTrueLetter();
             trainWord(word, trueLetter);
@@ -82,7 +83,6 @@ public class TrainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ButtonChar buttonChar = (ButtonChar) v;
-                progressBar.setProgress(trainManager.getProgress());
                 buttonChar.correctAnswer();
                 int childCount = linearLayout.getChildCount();
                 for (int i = 0; i < childCount; i++) {
