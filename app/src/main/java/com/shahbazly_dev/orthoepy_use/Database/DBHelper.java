@@ -1,4 +1,4 @@
-package com.shahbazly_dev.orthoepy_use;
+package com.shahbazly_dev.orthoepy_use.Database;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -10,15 +10,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-class DBHelper extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String WORD = "WORD";
-    private static final String STUDY_LEVEL = "STUDY_LEVEL";
-    private static final String ERROR_COUNT = "ERROR_COUNT";
-    private static final String TABLE_NAME = "words";
+
     private AssetManager manager;
 
-    DBHelper(Context context, int dbVersion){
+    public DBHelper(Context context, int dbVersion){
         super(context, "WordsDB.db", null, dbVersion);
         manager = context.getAssets();
     }
@@ -29,7 +26,8 @@ class DBHelper extends SQLiteOpenHelper {
                 "\t`word_id`\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "\t`word`\tTEXT,\n" +
                 "\t`study_level`\tINTEGER DEFAULT 0,\n" +
-                "\t`errors_count`\tINTEGER DEFAULT 0\n" +
+                "\t`mistakes_count`\tINTEGER DEFAULT 0,\n" +
+                "\t`isStudied`\tbit NULL DEFAULT 0\n" +
                 ");");
         Log.d("DATABASE","DB CREATED");
 
@@ -60,11 +58,13 @@ class DBHelper extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        database.close();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS `words`");
         onCreate(db);
+        db.close();
     }
 }

@@ -1,5 +1,6 @@
-package com.shahbazly_dev.orthoepy_use;
+package com.shahbazly_dev.orthoepy_use.Activies;
 
+import com.shahbazly_dev.orthoepy_use.R;
 import com.stephentuso.welcome.BasicPage;
 import com.stephentuso.welcome.TitlePage;
 import com.stephentuso.welcome.WelcomeConfiguration;
