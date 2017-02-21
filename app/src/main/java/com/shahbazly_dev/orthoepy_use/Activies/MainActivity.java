@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        dbHelper = new DBHelper(this,1);
+        dbHelper = new DBHelper(this,2);
         dbHelper.getWritableDatabase();
     }
 

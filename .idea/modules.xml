@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../../../share/AndroidStudioProjects/orthoepy_use/app/app.iml" filepath="$PROJECT_DIR$/../../../share/AndroidStudioProjects/orthoepy_use/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../../share/AndroidStudioProjects/orthoepy_use/orthoepy_use.iml" filepath="$PROJECT_DIR$/../../../share/AndroidStudioProjects/orthoepy_use/orthoepy_use.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Орфоэпия ЕГЭ.iml" filepath="$PROJECT_DIR$/Орфоэпия ЕГЭ.iml" />
     </modules>
   </component>
 </project>

@@ -12,7 +12,6 @@ import java.util.Scanner;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-
     private AssetManager manager;
 
     public DBHelper(Context context, int dbVersion){
@@ -27,7 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "\t`word`\tTEXT,\n" +
                 "\t`study_level`\tINTEGER DEFAULT 0,\n" +
                 "\t`mistakes_count`\tINTEGER DEFAULT 0,\n" +
-                "\t`isStudied`\tbit NULL DEFAULT 0\n" +
+                "\t`is_studied`\tbit NULL DEFAULT 0\n" +
                 ");");
         Log.d("DATABASE","DB CREATED");
 
@@ -65,6 +64,5 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS `words`");
         onCreate(db);
-        db.close();
     }
 }

@@ -18,14 +18,14 @@ public class WordsModel {
     }
 
     private void initializeDB(Context context){
-        dbHelper = new DBHelper(context, 1);
+        dbHelper = new DBHelper(context, 2);
         dbHelper.getWritableDatabase();
     }
 
     public ArrayList<String> getWords(int amount){
         ArrayList<String> randomWords = words;
         Cursor cursor_unstudied = dbHelper.getReadableDatabase()
-                .rawQuery("SELECT word FROM words WHERE isStudied =0", null);
+                .rawQuery("SELECT `word` FROM `words` WHERE `words`.`is_studied` = '0'", null);
         if (cursor_unstudied.moveToFirst()){
             int word = cursor_unstudied.getColumnIndex("word");
             do {
@@ -35,7 +35,7 @@ public class WordsModel {
         cursor_unstudied.close();
 
         Cursor cursor_studied = dbHelper.getReadableDatabase()
-                .rawQuery("SELECT word FROM words WHERE study_level < 100", null);
+                .rawQuery("SELECT `word` FROM `words` WHERE `study_level` < 100", null);
         if (cursor_studied.moveToFirst()){
             int word = cursor_studied.getColumnIndex("word");
             do {
@@ -77,8 +77,8 @@ public class WordsModel {
 
     public void setStudied(String word){
         Cursor cursor = dbHelper.getReadableDatabase()
-                .rawQuery("UPDATE words SET isStudied = 1 " +
-                        "WHERE word = '" + word + "'",null);
+                .rawQuery("UPDATE `words` SET `is_studied` = 1 " +
+                        "WHERE `word` = '" + word + "'",null);
         cursor.moveToFirst();
         cursor.close();
     }
