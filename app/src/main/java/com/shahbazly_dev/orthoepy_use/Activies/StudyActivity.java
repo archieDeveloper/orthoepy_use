@@ -1,5 +1,6 @@
-package com.shahbazly_dev.orthoepy_use;
+package com.shahbazly_dev.orthoepy_use.Activies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -7,47 +8,43 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
-import java.io.IOException;
+import com.shahbazly_dev.orthoepy_use.ButtonChar;
+import com.shahbazly_dev.orthoepy_use.Managers.StudyManager;
+import com.shahbazly_dev.orthoepy_use.Models.WordsModel;
+import com.shahbazly_dev.orthoepy_use.R;
 
 import co.mobiwise.library.ProgressLayout;
 
-public class TrainActivity extends AppCompatActivity {
-    ProgressBar progressBar;
+public class StudyActivity extends AppCompatActivity {
+
     ProgressLayout progressLayout;
-    TrainManager trainManager;
+    StudyManager studyManager;
     LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_train);
+        setContentView(R.layout.activity_study);
 
         linearLayout = (LinearLayout) findViewById(R.id.liner);
-        progressBar = (ProgressBar) findViewById(R.id.progressTrain);
         progressLayout = (ProgressLayout) findViewById(R.id.progressLayout);
 
-        try {
-            WordsModel wordsModel = new WordsModel(getAssets().open("words.txt"));
-            trainManager = new TrainManager(wordsModel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        WordsModel wordsModel = new WordsModel(getApplicationContext());
+        studyManager = new StudyManager(wordsModel);
 
         startTrain();
     }
 
     protected void startTrain() {
-        if (trainManager.hasNextWord()) {
-            progressBar.setProgress(trainManager.getProgress());
-            progressLayout.setCurrentProgress(trainManager.getProgress());
-            String word = trainManager.getNextWord();
-            String trueLetter = trainManager.getTrueLetter();
+        if (studyManager.hasNextWord()) {
+            progressLayout.setCurrentProgress(studyManager.getProgress());
+            String word = studyManager.getNextWord();
+            String trueLetter = studyManager.getTrueLetter();
             trainWord(word, trueLetter);
         } else {
-            this.recreate();
-            Log.e("GAMEOVER", "Закончились слова, начни занова :) " + Integer.toString(trainManager.getCountErrors()) + " ошибок");
+            Intent intent = new Intent(StudyActivity.this, ResultsActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -56,26 +53,26 @@ public class TrainActivity extends AppCompatActivity {
             int wordLength = word.length();
             for (int i = 0; i < wordLength; i++) {
                 boolean isLast = i == wordLength - 1;
-                createButton(word.charAt(i), trueLetter, i, isLast);
+                createButton(word.charAt(i), trueLetter, i, isLast, word);
             }
         } else {
             Log.e("ERROR", "Не нашел правильный символ в слове: \"" + word + "\"");
         }
     }
 
-    public void createButton(char charInButton, String true_letter, int item, boolean isLast) {
+    public void createButton(char charInButton, String true_letter, int item, boolean isLast,String word) {
         ButtonChar buttonChar = new ButtonChar(this , charInButton);
         if (isLast) {
             buttonChar.inAnim(item, animationListenerInButton());
         } else {
             buttonChar.inAnim(item);
         }
-        boolean isVowelsChar = trainManager.getWordsModel().isVowelsChar(charInButton);
+        boolean isVowelsChar = studyManager.getWordsModel().isVowelsChar(charInButton);
         if (isVowelsChar) {
             boolean isCorrectButton = true_letter.equals(Character.toString(charInButton));
             View.OnClickListener onClickListener = isCorrectButton
-                    ? onClickListenerButtonCorrect()
-                    : onClickListenerButtonInCorrect();
+                    ? onClickListenerButtonCorrect(word)
+                    : onClickListenerButtonInCorrect(word);
             buttonChar.createVowelsButton(onClickListener);
         } else {
             buttonChar.createConsonantButton();
@@ -83,11 +80,14 @@ public class TrainActivity extends AppCompatActivity {
         linearLayout.addView(buttonChar);
     }
 
-    public View.OnClickListener onClickListenerButtonCorrect() {
+    public View.OnClickListener onClickListenerButtonCorrect(final String word) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                studyManager.increaseLevel(word);
+                studyManager.setStudied(word);
                 ButtonChar buttonChar = (ButtonChar) v;
+                progressLayout.setCurrentProgress(studyManager.getProgress());
                 buttonChar.correctAnswer();
                 int childCount = linearLayout.getChildCount();
                 for (int i = 0; i < childCount; i++) {
@@ -103,13 +103,15 @@ public class TrainActivity extends AppCompatActivity {
         };
     }
 
-    public View.OnClickListener onClickListenerButtonInCorrect() {
+    public View.OnClickListener onClickListenerButtonInCorrect(final String word) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ButtonChar buttonChar = (ButtonChar) v;
                 buttonChar.inCorrectAnswer();
-                trainManager.addCountError();
+                studyManager.addMistake(word);
+                studyManager.reduceLevel(word);
+                studyManager.setStudied(word);
             }
         };
     }

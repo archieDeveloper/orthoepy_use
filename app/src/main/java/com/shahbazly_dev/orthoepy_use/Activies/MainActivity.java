@@ -1,4 +1,4 @@
-package com.shahbazly_dev.orthoepy_use;
+package com.shahbazly_dev.orthoepy_use.Activies;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.shahbazly_dev.orthoepy_use.Database.DBHelper;
+import com.shahbazly_dev.orthoepy_use.R;
 import com.stephentuso.welcome.WelcomeHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
         welcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
         welcomeScreen.show(savedInstanceState);
 
-        Button button = (Button)findViewById(R.id.btn_start_train);
+        Button button = (Button)findViewById(R.id.btn_learning);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, TrainActivity.class);
+                Intent intent = new Intent(MainActivity.this, StudyActivity.class);
                 startActivity(intent);
             }
         });

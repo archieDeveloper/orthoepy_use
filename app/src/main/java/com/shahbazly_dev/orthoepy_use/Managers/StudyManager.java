@@ -1,30 +1,33 @@
-package com.shahbazly_dev.orthoepy_use;
+package com.shahbazly_dev.orthoepy_use.Managers;
 
 import android.util.Log;
 
+import com.shahbazly_dev.orthoepy_use.Models.WordsModel;
+
 import java.util.ArrayList;
 
-class TrainManager {
+public class StudyManager {
+
     private WordsModel wordsModel;
     private ArrayList<String> words;
     private int index;
     private int maxIndex;
     private int countErrors;
 
-    TrainManager(WordsModel wordsModel) {
+    public StudyManager(WordsModel wordsModel) {
         this.wordsModel = wordsModel;
         restart();
         Log.e("SIZE words", Integer.toString(maxIndex));
     }
 
-    public void restart() {
-        words = wordsModel.getRandomWords(10);
+    private void restart() {
+        words = wordsModel.getWords(10);
         index = 0;
         countErrors = 0;
         maxIndex = words.size();
     }
 
-    WordsModel getWordsModel() {
+    public WordsModel getWordsModel() {
         return wordsModel;
     }
 
@@ -36,28 +39,40 @@ class TrainManager {
         return maxIndex;
     }
 
-    String getTrueLetter() {
+    public String getTrueLetter() {
         return wordsModel.getTrueLetter(words.get(index - 1));
     }
 
-    boolean hasNextWord() {
+    public boolean hasNextWord() {
         return index < maxIndex;
     }
 
-    String getNextWord() {
+    public String getNextWord() {
         index += 1;
         return words.get(index - 1);
     }
 
-    void addCountError() {
-        countErrors += 1;
+    public void addMistake(String word) {
+        wordsModel.addMistake(word);
     }
 
-    int getCountErrors() {
+    public void increaseLevel(String word){
+        wordsModel.increaseLevel(word);
+    }
+
+    public void reduceLevel(String word){
+        wordsModel.reduceLevel(word);
+    }
+
+    public void setStudied(String word){
+        wordsModel.setStudied(word);
+    }
+
+    public int getCountErrors() {
         return countErrors;
     }
 
-    int getProgress() {
+    public int getProgress() {
         return (int) (((float)index/maxIndex)*100);
     }
 }
